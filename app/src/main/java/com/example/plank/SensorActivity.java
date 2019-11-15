@@ -55,9 +55,12 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
     private int first = 0;
     private float FirstX,FirstY,FirstZ =0;
     private int frag = 0;
+    private int frag_countnum = 0;
     private int timing = 0;
+    private int time_count = 0;
+    private String now_time;
+    private String before_time;
     final Handler handler = new Handler();
-
 
     private Runnable delay;
     private Runnable delayStartCountDown;
@@ -287,17 +290,27 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
             sensorX = event.values[0];
             sensorY = event.values[1];
             sensorZ = event.values[2];
-
+            now_time = (String) timerText.getText();
 
             if(frag==1) {
                 if (FirstZ - nextZ < -1 || FirstZ - nextZ > 1) {
                     soundPool.play(soundOne, 1.0f, 1.0f, 0, 0, 1);
+                     frag_countnum = 1;
                 } else if (FirstX - nextX < -1 || FirstX - nextX > 1) {
                     soundPool.play(soundOne, 1.0f, 1.0f, 0, 0, 1);
+                    frag_countnum = 1;
                 } else if (FirstY - nextY < -1 || FirstY - nextY > 1) {
                     soundPool.play(soundOne, 1.0f, 1.0f, 0, 0, 1);
+                    frag_countnum = 1;
+                }else{
+                    if(frag_countnum==0 && before_time != now_time){
+                        time_count++;
+                    }
+                    frag_countnum = 0;
+
                 }
             }
+            before_time = now_time;
             nextX = sensorX;
             nextY = sensorY;
             nextZ = sensorZ;
