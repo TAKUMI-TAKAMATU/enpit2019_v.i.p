@@ -35,6 +35,7 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
         Log.d("camera","get permission");
         // カメラビューのインスタンスを変数にバインド
         mCameraView = findViewById(R.id.camera_view);
+        mCameraView.setCameraPermissionGranted();
         // リスナーの設定 (後述)
         mCameraView.setCvCameraViewListener(this);
     }
