@@ -118,7 +118,7 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
     //画像処理するメソッド
     @Override
     public Mat onCameraFrame(Mat inputFrame) {
-        return null;
+        return inputFrame;
     }
 
 
