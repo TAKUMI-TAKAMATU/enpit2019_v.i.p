@@ -15,6 +15,7 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 
 
 public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener{
@@ -118,7 +119,9 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
     //画像処理するメソッド
     @Override
     public Mat onCameraFrame(Mat inputFrame) {
-        return inputFrame;
+        Mat dest = new Mat();
+        Imgproc.cvtColor(inputFrame, dest, Imgproc.COLOR_BGR2GRAY);
+        return dest;
     }
 
 
