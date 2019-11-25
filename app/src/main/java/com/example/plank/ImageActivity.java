@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -23,6 +22,7 @@ public class ImageActivity extends AppCompatActivity {
         OpenCvButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getApplication(), OpencvActivity.class);
                 startActivity(intent);
             }
@@ -34,6 +34,7 @@ public class ImageActivity extends AppCompatActivity {
         ImageCompareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getApplication(), CompareActivity.class);
                 startActivity(intent);
             }
@@ -45,6 +46,7 @@ public class ImageActivity extends AppCompatActivity {
         PoseNetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getApplication(), PosenetActivity.class);
                 startActivity(intent);
             }

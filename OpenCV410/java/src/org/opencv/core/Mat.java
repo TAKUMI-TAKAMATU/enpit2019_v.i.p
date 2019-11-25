@@ -1398,4 +1398,5 @@ public class Mat {
     private static native double[] nGetIdx(long self, int[] idx);
 
     private static native String nDump(long self);
+
 }
