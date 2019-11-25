@@ -1,111 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    tools:context=".ImageActivity">
 
 
-        <Button
-            android:id="@+id/return_button_sensor"
-            android:layout_width="162dp"
-            android:layout_height="36dp"
-            android:layout_margin="10dp"
-            android:text="ホーム"
-            android:textSize="14sp" />
+    <Button
+        android:id="@+id/return_sub"
+        android:layout_width="187dp"
+        android:layout_height="44dp"
+        android:layout_margin="20dp"
+        android:text="ホーム"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.008" />
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
-            android:layout_height="197dp" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/biginnermode_button"
+        android:layout_width="277dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:text="初心者モード"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal">
+    <Button
+        android:id="@+id/intermediatemode_button"
+        android:layout_width="277dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:text="中級者モード"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.667" />
 
-
-        <TextView
-            android:id="@+id/ready_time"
-            android:layout_width="193dp"
-            android:layout_height="51dp"
-            android:layout_margin="20dp"
-            android:text="スタートまで"
-            android:textColor="#00f"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/timer"
-            android:layout_width="118dp"
-            android:layout_height="51dp"
-            android:layout_margin="20dp"
-            android:textColor="#00f"
-            android:textSize="36sp" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal">
-
-
-        <TextView
-            android:id="@+id/training_time"
-            android:layout_width="193dp"
-            android:layout_height="51dp"
-            android:layout_margin="20dp"
-            android:text="トレーニング"
-            android:textColor="#00f"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/timer_training"
-            android:layout_width="118dp"
-            android:layout_height="51dp"
-            android:layout_margin="20dp"
-            android:textColor="#00f"
-            android:textSize="36sp" />
+    <Button
+        android:id="@+id/advancedmode_button"
+        android:layout_width="277dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:text="上級者モード"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.462"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.846" />
 
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/start_button"
-            android:layout_width="152dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:enabled="true"
-            android:text="スタート" />
-
-        <Button
-            android:id="@+id/stop_button"
-            android:layout_width="152dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="ストップ" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/text_view"
-        android:layout_width="154dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:textColor="#00f"
-        android:textSize="20sp" />
-
-</LinearLayout>
-
+</androidx.constraintlayout.widget.ConstraintLayout>

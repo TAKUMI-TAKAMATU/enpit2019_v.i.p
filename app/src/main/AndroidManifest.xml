@@ -36,6 +36,15 @@
         <activity
             android:name=".PosenetActivity"
             android:label="Plank"></activity>
+        <activity
+            android:name=".BiginnerActivity"
+            android:label="Plank"></activity>
+        <activity
+            android:name=".IntermediateActivity"
+            android:label="Plank"></activity>
+        <activity
+            android:name=".AdvancedActivity"
+            android:label="Plank"></activity>
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/activity_image2" /> <!-- センサーボタン -->

@@ -13,9 +13,6 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Rational
 import android.util.Size
-import android.view.Surface
-import android.view.TextureView
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -30,6 +27,9 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.util.concurrent.TimeUnit
+import android.media.SoundPool
+import android.media.AudioAttributes
+import android.view.*
 
 // パーミッションを要求するときのリクエストコード番号です
 // 複数のContextからパーミッションが要求された時にどこから要求されたかを区別するために使います
@@ -43,6 +43,10 @@ class CompareActivity : AppCompatActivity() {
     private lateinit var viewFinder: TextureView    //動画用
     lateinit var file:File                  //保存先
     var capture_done=0                      //キャプチャーボタンを押したかどうか
+
+    //11/17　SoundPool実装
+    private lateinit var soundPool: SoundPool
+    private var soundOne = 0
 
     private class LuminosityAnalyzer : ImageAnalysis.Analyzer {
         private var lastAnalyzedTimestamp = 0L
@@ -59,6 +63,10 @@ class CompareActivity : AppCompatActivity() {
 
         override fun analyze(image: ImageProxy, rotationDegrees: Int) {
             val currentTimestamp = System.currentTimeMillis()
+            //11/23　SoundPool実装
+            lateinit var soundPool: SoundPool
+
+            var soundOne = 0
             // 毎秒ごとに平均輝度を計算する
             if (currentTimestamp - lastAnalyzedTimestamp >=
                     TimeUnit.SECONDS.toMillis(1)) {
@@ -74,6 +82,13 @@ class CompareActivity : AppCompatActivity() {
                 Log.d("CameraXApp", "Average luminosity: $luma")
                 // 最後に分析したフレームのタイムスタンプに更新
                 lastAnalyzedTimestamp = currentTimestamp
+
+                //メンバ変数を取れない
+
+                //11/23追加
+                if (luma <= 100){
+                    soundPool.play(soundOne, 1.0f, 1.0f, 0, 0, 1.0f)
+                }
             }
         }
     }
@@ -83,7 +98,29 @@ class CompareActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_compare)
 
+        //11/23追加　スペースの関係でアクションバー非表示にしました(´･ω･`)
+        val actionBar = supportActionBar
+        actionBar!!.hide()
+        //11/23image_viewをドラッグして動かせるようにしたやつ
+        var listener = View.OnTouchListener(function = { view, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_MOVE) {
+                view.y = motionEvent.rawY - view.height/2
+                view.x = motionEvent.rawX - view.width/2
+            }
+            true
+        })
+        image_view.setOnTouchListener(listener)
+        //11/23ここまで
+
+        //11/23　image_viewを半透明にする処理
+        image_button.setOnClickListener {
+            val image = image_view
+            image.setImageAlpha(128)
+
+        }
+
         imageView = findViewById(R.id.image_view)
+
         viewFinder = findViewById(R.id.view_finder)
 
         // カメラパーミッションの要求
@@ -99,6 +136,34 @@ class CompareActivity : AppCompatActivity() {
             updateTransform()
         }
 
+        //11/17soundpool実装
+        val audioAttributes = AudioAttributes.Builder()
+                // USAGE_MEDIA
+                // USAGE_GAME
+                .setUsage(AudioAttributes.USAGE_GAME)
+                // CONTENT_TYPE_MUSIC
+                // CONTENT_TYPE_SPEECH, etc.
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .build()
+
+        soundPool = SoundPool.Builder()
+                .setAudioAttributes(audioAttributes)
+                // ストリーム数に応じて
+                .setMaxStreams(2)
+                .build()
+
+        // one.wav をロードしておく
+        soundOne = soundPool.load(this, R.raw.alarm, 1)
+
+
+        // load が終わったか確認する場合
+        soundPool.setOnLoadCompleteListener{ soundPool, sampleId, status ->
+            Log.d("debug", "sampleId=$sampleId")
+            Log.d("debug", "status=$status")
+        }
+
+
+
 
         //11/11ポッキーの日
         timer_button.setOnClickListener { /**画像班タイマー*/
@@ -106,13 +171,14 @@ class CompareActivity : AppCompatActivity() {
             object : CountDownTimer(5000,100){
                 override fun onFinish() {
                     //終了時の処理
-                    count.text = "　　　　終了！！！"
+                    count.text = "終了！！！"
+                    soundPool.play(soundOne, 1.0f, 1.0f, 0, 0, 1.0f)
 
                 }
 
                 override fun onTick(p0: Long) {
                     // 区切り（0.1秒毎）
-                    count.text = "　　　　後 ${p0 /1000} 秒(デモ用)"
+                    count.text = "後 ${p0 /1000} 秒"
                 }
 
             }.start()
@@ -127,6 +193,8 @@ class CompareActivity : AppCompatActivity() {
             intent.type = "*/*"
             startActivityForResult(intent, RESULT_CAMERA)
         }
+
+
 
     }
     /**画面下にカメラを起動*/
