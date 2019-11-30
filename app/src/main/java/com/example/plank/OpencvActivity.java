@@ -16,6 +16,7 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.core.Point;
 
 
 
@@ -115,10 +116,17 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
     @Override
     public Mat onCameraFrame(Mat inputFrame) {
         Mat dest1 = new Mat();
-        Mat dest2 = new Mat();
-        Imgproc.cvtColor(inputFrame, dest1, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.cvtColor(inputFrame, dest2, Imgproc.COLOR_BGR2GRAY);
-
+        int angle = -90;
+        double radians = Math.toRadians(angle);
+        double sin = Math.abs(Math.sin(radians));
+        double cos = Math.abs(Math.cos(radians));
+        int newWidth = (int) (inputFrame.width() * cos + inputFrame.height() * sin);
+        int newHeight = (int) (inputFrame.width() * sin + inputFrame.height() * cos);
+        // rotating image
+        Point center = new Point(newWidth / 2, newHeight / 2);
+        Mat rotMatrix = Imgproc.getRotationMatrix2D(center, angle, m_cameraView.getWidth() * 1.0/ newWidth ); //1.0 means 100 % scale
+        Imgproc.warpAffine(inputFrame, dest1, rotMatrix, inputFrame.size());
+        
         return dest1;
     }
 
