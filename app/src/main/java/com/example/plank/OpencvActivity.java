@@ -17,14 +17,15 @@ import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Point;
-
-
+import org.opencv.videoio.VideoCapture;
 
 public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener {
 
+    //CameraBridgeViewBase を宣言して、先ほどレイアウトに配置したJavaCameraView に割り当てる
     private CameraBridgeViewBase m_cameraView;
+    //
     private Mat mOutputFrame;
-
+    //
     static {
         System.loadLibrary("opencv_java4");
     }
@@ -42,10 +43,16 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
         // カメラビューのインスタンスを変数にバインド
         m_cameraView = findViewById(R.id.camera_view);
 
+        //
         m_cameraView.setCameraPermissionGranted();
 
-        // リスナーの設定 (後述)
+        // このActivityを指定して、↓追加したonCameraViewStarted、onCameraViewStopped、onCameraFrame を呼んでもらう
         m_cameraView.setCvCameraViewListener(this);
+
+//        VideoCapture v = new VideoCapture();
+//        v.open(1);
+//        boolean wset = v.set();
+//        boolean hset = v.set(Highgui.CV_CAP_PROP_FRAME_HEIGHT, 800);
 
 
         //m_cameraView.enableView();
@@ -118,15 +125,17 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
         Mat dest1 = new Mat();
         int angle = -90;
         double radians = Math.toRadians(angle);
+        //sin-90 = -1
         double sin = Math.abs(Math.sin(radians));
+        //cos -90
         double cos = Math.abs(Math.cos(radians));
         int newWidth = (int) (inputFrame.width() * cos + inputFrame.height() * sin);
         int newHeight = (int) (inputFrame.width() * sin + inputFrame.height() * cos);
         // rotating image
         Point center = new Point(newWidth / 2, newHeight / 2);
-        Mat rotMatrix = Imgproc.getRotationMatrix2D(center, angle, m_cameraView.getWidth() * 1.0/ newWidth ); //1.0 means 100 % scale
+        Mat rotMatrix = Imgproc.getRotationMatrix2D(center, angle, m_cameraView.getWidth() * 1.0/ newWidth / 6); //1.0 means 100 % scale
         Imgproc.warpAffine(inputFrame, dest1, rotMatrix, inputFrame.size());
-        
+
         return dest1;
     }
 
