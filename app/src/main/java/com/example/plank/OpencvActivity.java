@@ -23,46 +23,42 @@ import org.opencv.video.Video;
 
 
 
-
 public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener {
 
-    private CameraBridgeViewBase m_cameraView;
+    // CameraBridgeViewBase は JavaCameraView/NativeCameraView のスーパークラス
+    private CameraBridgeViewBase mCameraView;
     private Mat mOutputFrame;
 
     static {
         System.loadLibrary("opencv_java4");
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_opencv);
-
-        //OpenCVLoader.initDebug();
+        setContentView(R.layout.activity_posenet);
         getPermissionCamera(this);
-        Log.d("camera","get permission");
-
+        Log.d("camera", "get permission");
         // カメラビューのインスタンスを変数にバインド
-        //m_cameraView = findViewById(R.id.camera_view);
-
-        m_cameraView.setCameraPermissionGranted();
-
+        mCameraView = findViewById(R.id.camera_view);
+        mCameraView.setCameraPermissionGranted();
         // リスナーの設定 (後述)
-        m_cameraView.setCvCameraViewListener(this);
-
+        mCameraView.setCvCameraViewListener(this);
     }
+
+// ライブラリ初期化完了後に呼ばれるコールバック (onManagerConnected)
+// public abstract class BaseLoaderCallback implements LoaderCallbackInterface
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 
         @Override
         public void onManagerConnected(int status) {
-            Log.d("tag","onManagerConnected・status="+status);
+            Log.d("tag", "onManagerConnected・status=" + status);
             switch (status) {
                 // 読み込みが成功したらカメラプレビューを開始
                 case LoaderCallbackInterface.SUCCESS:
-                    Log.d("tag","読み込みが成功したらカメラプレビューを開始");
-                    m_cameraView.enableView();
+                    Log.d("tag", "読み込みが成功したらカメラプレビューを開始");
+                    mCameraView.enableView();
                     break;
                 default:
                     super.onManagerConnected(status);
@@ -71,7 +67,7 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
         }
     };
 
-    public static boolean getPermissionCamera(Activity activity) {
+    public static boolean getPermissionCamera(Activity activity){
         if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = new String[]{Manifest.permission.CAMERA};
             ActivityCompat.requestPermissions(activity, permissions, 0);
@@ -98,60 +94,47 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
     @Override
     public void onPause() {
         super.onPause();
-        m_cameraView.disableView();
+        mCameraView.disableView();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (m_cameraView != null) {
-            m_cameraView.disableView();
+        if (mCameraView != null) {
+            mCameraView.disableView();
         }
     }
 
+
+    //カメラビュー開始時の処理
     @Override
     public void onCameraViewStarted(int width, int height) {
-        Log.d("camera","viewstart");
+        // カメラプレビュー開始時に呼ばれる
     }
 
+    //カメラビュー終了時の処理
     @Override
-    public void onCameraViewStopped() {}
+    public void onCameraViewStopped() {
+        // カメラプレビュー終了時に呼ばれる
+    }
 
+    //画像処理するメソッド
     @Override
-    public Mat onCameraFrame(Mat inputFrame) { //inputFrameは毎秒何枚かフレーム取得しているはず
+    public Mat onCameraFrame(Mat inputFrame) {
 
-        //前フレーム
-        Mat dest1 = new Mat();
-
+        //フレーム
+        Mat dest = new Mat();
 
         //output
         Mat output = new Mat();
 
-        Imgproc.cvtColor(inputFrame, dest1, Imgproc.COLOR_BGR2GRAY);
-        Log.d("onCameraFrame", "前フレーム作成");
+        Imgproc.cvtColor(inputFrame, dest, Imgproc.COLOR_BGR2GRAY);
 
         BackgroundSubtractorMOG2 mog2 = Video.createBackgroundSubtractorMOG2();
 
-        mog2.apply(dest1,output,-1);
-
-        /*
-        int angle = -90;
-        double radians = Math.toRadians(angle);
-        //sin-90 = -1
-        double sin = Math.abs(Math.sin(radians));
-        //cos -90
-        double cos = Math.abs(Math.cos(radians));
-        int newWidth = (int) (inputFrame.width() * cos + inputFrame.height() * sin);
-        int newHeight = (int) (inputFrame.width() * sin + inputFrame.height() * cos);
-        // rotating image
-        Point center = new Point(newWidth / 2, newHeight / 2);
-        Mat rotMatrix = Imgproc.getRotationMatrix2D(center, angle, m_cameraView.getWidth() * 1.0/ newWidth); //1.0 means 100 % scale
-        Imgproc.warpAffine(inputFrame, dest1, rotMatrix, inputFrame.size());
-
-         */
+        mog2.apply(dest,output,-1);
 
         return output;
     }
-
 
 }

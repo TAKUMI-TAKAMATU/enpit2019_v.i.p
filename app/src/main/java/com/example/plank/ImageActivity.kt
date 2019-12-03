@@ -34,7 +34,7 @@ class ImageActivity : AppCompatActivity() {
         //posenetの処理をする画面に遷移
         val PoseNetButton = findViewById<Button>(R.id.posene_button)
         PoseNetButton.setOnClickListener {
-            val intent = Intent(application , PosenetActivity::class.java)
+            val intent = Intent(application , OpencvActivity::class.java)
             startActivity(intent)
         }
 
