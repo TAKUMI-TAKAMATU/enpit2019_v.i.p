@@ -9,7 +9,7 @@ public class PosenetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_posenet);
+        //setContentView(R.layout.activity_posenet);
 
 
 
