@@ -22,12 +22,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_compare.*
 import org.opencv.android.OpenCVLoader
+import org.opencv.core.Mat
+import org.opencv.core.MatOfByte
+import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.video.BackgroundSubtractorMOG2
+import org.opencv.video.Video
 import java.io.File
 import java.nio.ByteBuffer
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
-
 
 // パーミッションを要求するときのリクエストコード番号です
 // 複数のContextからパーミッションが要求された時にどこから要求されたかを区別するために使います
@@ -233,8 +236,22 @@ class OpencvActivityKt : AppCompatActivity() {
     }
 
     /**この関数で動体検知をしたい*/
-    fun motion(image: ImageProxy, rotationDegrees: Int){
-        val moG2: BackgroundSubtractorMOG2
+    fun motion(image: ImageProxy, rotationDegrees: Int): Mat? {
+        fun ByteBuffer.toByteArray(): ByteArray {
+            rewind()    // バッファを０にする
+            val data = ByteArray(remaining())
+            get(data)   // Byte配列にバッファをコピー
+            return data // Byte配列を返却
+        }
+        val mog2: BackgroundSubtractorMOG2=Video.createBackgroundSubtractorMOG2()
+        var out_img:Mat? =null
+        val bb = image.planes[0].buffer
+        // callback objectからimage dataの抽出
+        val data = byteArrayOf()[bb.remaining()]
+        //bb.toByteArray()
+        var in_img:Mat= Imgcodecs.imdecode(MatOfByte(data) , Imgcodecs.IMREAD_UNCHANGED)
+        mog2.apply(in_img,out_img, (-1).toDouble())
+        return out_img
     }
 
 }
