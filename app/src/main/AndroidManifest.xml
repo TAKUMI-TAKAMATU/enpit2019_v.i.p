@@ -34,7 +34,7 @@
             android:label="Plank"></activity>
         <activity
             android:allowBackup="true"
-            android:name=".OpencvActivity"
+            android:name=".OpencvActivityKt"
             android:label="Plank"></activity>
         <activity
             android:name=".PosenetActivity"
