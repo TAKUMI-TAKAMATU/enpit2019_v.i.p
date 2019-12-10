@@ -9708,4 +9708,5 @@ public static Size getTextSize(String text, int fontFace, double fontScale, int 
     private static native void watershed_0(long image_nativeObj, long markers_nativeObj);
 private static native double[] n_getTextSize(String text, int fontFace, double fontScale, int thickness, int[] baseLine);
 
+
 }

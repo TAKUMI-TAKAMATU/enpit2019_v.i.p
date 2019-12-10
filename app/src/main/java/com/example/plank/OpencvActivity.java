@@ -19,8 +19,8 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Core;
 import org.opencv.core.Point;
 import org.opencv.video.BackgroundSubtractorMOG2;
+import org.opencv.videoio.VideoCapture;
 import org.opencv.video.Video;
-
 
 
 public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener {
@@ -28,6 +28,7 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
     // CameraBridgeViewBase は JavaCameraView/NativeCameraView のスーパークラス
     private CameraBridgeViewBase mCameraView;
     private Mat mOutputFrame;
+    private VideoCapture   m_videoCapture;
 
     static {
         System.loadLibrary("opencv_java4");
@@ -122,6 +123,7 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
     @Override
     public Mat onCameraFrame(Mat inputFrame) {
 
+
         //フレーム
         Mat dest = new Mat();
 
@@ -134,7 +136,11 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
 
         mog2.apply(dest,output,-1);
 
+        //mog2.apply(dest,output,-1);
+
         return output;
+
+
     }
 
 }
