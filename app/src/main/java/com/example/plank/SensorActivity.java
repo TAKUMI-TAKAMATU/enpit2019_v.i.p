@@ -19,13 +19,24 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.os.Handler;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.view.View.OnClickListener;
+import android.os.Build;
+import android.os.Bundle;
 
 public class SensorActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
+
+
 
         if (isFirstTime()) {
             // show dialog
@@ -129,6 +140,7 @@ public class SensorActivity extends AppCompatActivity {
             // タイトル
             alert.setTitle("使い方！");
             alert.setView(  imageView );
+            alert.setView(R.layout.activity_help1);
             alert.setPositiveButton( "OK", null );
             //alert.show();
             //alert.setItems(menulist, new DialogInterface.OnClickListener() {

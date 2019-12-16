@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="1人でプランクトレーニングをする時のモードです。このモードはポケットに入れたスマートフォンのセンサーによって、プランク中に姿勢が崩れたかどうかを感知して判定します。姿勢が崩れたと判定されると警告音が鳴ります。また、自分がプランク中にどれだけ姿勢をどれだけキープできたのかをグラフとスコアで確認することができます。"
+            android:textColor="#111111"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="※ このモードではプランク中のフォームの崩れを音で知らせます。音量を上げてご使用ください。周りの迷惑にならないようイヤホンを付けての使用を推奨します。"
+            android:textColor="#111111"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="____________________________________" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="この画面の説明です。"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="238dp"
+            android:src="@drawable/help2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="初心者モードの初期画面の説明です。"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="430dp"
+            android:src="@drawable/help1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="\n①戻るボタン：前の画面に戻ります。\n\n②姿勢変化グラフ：\n    プランク中に姿勢がどれだけ崩れたのかを確認できます。トレーニング開始時の状態を'0'として、姿勢の揺れ具合を'-4' ~ '4'までのレベルで表しています。また、プランク中に姿勢が崩れたと判定された時は音を鳴らして注意を促します。最初の状態に姿勢を戻すと音は止まります。\n\n③トレーニングスコア：\n    姿勢を維持できた時間に応じてトレーニングスコアが加算されます。また、トレーニング終了時には1セットのなかで姿勢を維持できた秒数が表示されます。頑張って高得点を目指しましょう。
+            \n\n④インターバルタイム：\n    トレーニング開始までのインターバルです。インターバルは全てのモードで10秒に設定されています。\n\n⑤トレーニングタイム：\n    1セットのトレーニング時間です。初心者モードは20秒、中級者モードは30秒、上級者モードは40秒となっています。\n\n⑥セット回数：\n    セットの回数を確認できます。\n\n⑦セット回数追加ボタン：\n    押すたびにセット回数を追加します。最大9セットまで設定可能です。\n\n⑧スタートボタン：\n    スタートボタンを押すとインターバルのカウントダウンが始まります。腰のポケットにスマホを入れてプランクの姿勢を作りましょう。3秒前からスタートの合図を知らせるカウントダウンの音が鳴ります。
+            \n\n⑨リセットボタン：\n    トレーニングを中止またはやり直したい時はリセットボタンを押してもとの時間にリセットしましょう。"
+            android:textColor="#111111"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="____________________________________" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="トレーニングを終えた後の状態です。"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="430dp"
+            android:src="@drawable/help3" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="中級者モード、上級者モードの使い方も同じです。慣れてきたら上の難易度に挑戦しましょう。"
+            android:textColor="#111111"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="____________________________________" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="ポケットに入れてスタート!"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/poket" />
+
+    </LinearLayout>
+</ScrollView>

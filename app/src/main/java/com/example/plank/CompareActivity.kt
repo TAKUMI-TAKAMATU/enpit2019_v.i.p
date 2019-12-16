@@ -111,12 +111,17 @@ class CompareActivity : AppCompatActivity() {
         })
         image_view.setOnTouchListener(listener)
         //11/23ここまで
+        var index = 0
 
         //11/23　image_viewを半透明にする処理
         image_button.setOnClickListener {
             val image = image_view
             image.setImageAlpha(128)
+        }
 
+        image_button2.setOnClickListener {
+            val image = image_view
+            image.setImageAlpha(255)
         }
 
         imageView = findViewById(R.id.image_view)

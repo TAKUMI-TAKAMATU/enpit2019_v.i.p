@@ -16,7 +16,11 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.core.Core;
 import org.opencv.core.Point;
+import org.opencv.video.BackgroundSubtractorMOG2;
+import org.opencv.video.Video;
+
 
 
 
@@ -47,8 +51,6 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
         // リスナーの設定 (後述)
         m_cameraView.setCvCameraViewListener(this);
 
-
-        //m_cameraView.enableView();
     }
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -108,14 +110,31 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
     }
 
     @Override
-    public void onCameraViewStarted(int width, int height) {}
+    public void onCameraViewStarted(int width, int height) {
+        Log.d("camera","viewstart");
+    }
 
     @Override
     public void onCameraViewStopped() {}
 
     @Override
-    public Mat onCameraFrame(Mat inputFrame) {
+    public Mat onCameraFrame(Mat inputFrame) { //inputFrameは毎秒何枚かフレーム取得しているはず
+
+        //前フレーム
         Mat dest1 = new Mat();
+
+
+        //output
+        Mat output = new Mat();
+
+        Imgproc.cvtColor(inputFrame, dest1, Imgproc.COLOR_BGR2GRAY);
+        Log.d("onCameraFrame", "前フレーム作成");
+
+        BackgroundSubtractorMOG2 mog2 = Video.createBackgroundSubtractorMOG2();
+
+        mog2.apply(dest1,output,-1);
+
+        /*
         int angle = -90;
         double radians = Math.toRadians(angle);
         //sin-90 = -1
@@ -129,7 +148,9 @@ public class OpencvActivity extends Activity implements CameraBridgeViewBase.CvC
         Mat rotMatrix = Imgproc.getRotationMatrix2D(center, angle, m_cameraView.getWidth() * 1.0/ newWidth); //1.0 means 100 % scale
         Imgproc.warpAffine(inputFrame, dest1, rotMatrix, inputFrame.size());
 
-        return dest1;
+         */
+
+        return output;
     }
 
 

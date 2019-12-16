@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
 import android.media.AudioAttributes;
@@ -36,6 +37,14 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import androidx.annotation.NonNull;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class BiginnerActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -56,15 +65,16 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
     private float FirstX,FirstY,FirstZ =0;
     private int frag = 0;
     private int timing = 0;
-    private double stop_count = 0;
+    private int stop_count = 0;
     private double all_count = 0;
     private int move_frag = 0;
     final Handler handler = new Handler();
     private int set_frag = 1;
     private TextView setCount;
 
-    private Runnable delay;
-    private Runnable delayStartCountDown;
+     Runnable delay;
+     Runnable delayStartCountDown;
+    private Runnable enablestart;
     // 3分= 3x60x1000 = 180000 msec
     long countNumber = 20000;
     //スタート前
@@ -81,7 +91,7 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
     private TextView textGraph;
     private LineChart mChart;
     private String[] labels = new String[]{
-            "揺れ",
+            "姿勢の揺れ度",
             "Y軸の揺れ",
             "Z軸の揺れ"};
     private int[] colors = new int[]{
@@ -106,9 +116,9 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
         timerText.setText(dataFormat.format(10000));
         timerText＿trainig.setText(dataFormat.format(countNumber));
         textView = findViewById(R.id.text_view);
-        textView.setText("ここに訓練結果が表示されます！");
+        textView.setText("トレーニングスコア：" + 0);
         setCount = findViewById(R.id.settime);
-        setCount.setText(set_frag +"セット");
+        setCount.setText("×" + set_frag +"セット");
 
         // CountDownTimer(long millisInFuture, long countDownInterval)
 
@@ -158,30 +168,47 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
             @Override
             public void onClick(View view) {
                 startButton.setEnabled(false);
+                handler.removeCallbacks(delayStartCountDown);
+                handler.removeCallbacks(delay);
+                FragmentManager fragmentManager2 = getFragmentManager();
+                AlertDialogFragment_setpoketto dialogFragment_setpoketto = new AlertDialogFragment_setpoketto();
+                // DialogFragmentの表示
+                dialogFragment_setpoketto.show(fragmentManager2, "setpoketto alert dialog");
+
+
                     countDown_before.start();
                     //wait_time();
                     //countDown_beforeで終わるときにスタートボタンが押せるの防ぐ
-                    timing = 1;
+                    //timing = 1;
                     delayStartCountDown = new Runnable() {//遅延定義 10/31
                         @Override
                         public void run() {
+                            timing = 1;
                             if (timing == 1) {
                                 soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
                             }
                         }
                     };
 
+                enablestart = new Runnable() {//遅延定義 10/31
+                    @Override
+                    public void run() {
+                        startButton.setEnabled(false);
+                    }
+                };
                     delay = new Runnable() {//遅延定義 10/31
                         @Override
                         public void run() {
                             mChart.setData(new LineData());
-                            soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
+                                soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
 
                             // 開始
-                            timing = 1;
+
                             first = 1;
                             frag = 1;
+
                             countDown.start();
+                            timing = 0;
                             startButton.setEnabled(false);
                         }
                         // }
@@ -192,11 +219,14 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
                     handler.postDelayed(delay, 10001);//遅延実行
                 int set_frag_c=set_frag;
                 for(int xx=0;set_frag>1;set_frag--) {
+                    handler.postDelayed(enablestart, (set_frag-1)*30000+100);
+                    handler.postDelayed(delayStartCountDown, (set_frag-1)*30000+7000);//遅延実行
+                    handler.postDelayed(delayStartCountDown, (set_frag-1)*30000+8000);//遅延実行
+                    handler.postDelayed(delayStartCountDown, (set_frag-1)*30000+9000);//遅延実行
                     handler.postDelayed(delay, (set_frag-1)*30000+10001);//遅延実行
                 }
                 set_frag=set_frag_c;
-                setCount.setText(set_frag +"セット");
-
+                setCount.setText("×" + set_frag +"セット");
             }
         });
         //ストップボタンの処理
@@ -217,13 +247,11 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
                 timerText.setText(dataFormat.format(10000));
                 timerText＿trainig.setText(dataFormat.format(countNumber));
 
-                //Intent intent = new Intent(getApplication(), ImageActivity.class);
-                //startActivity(intent);
                 stop_count=0;
                 all_count=0;
                 setCountButton.setEnabled(true);
                 set_frag=1;
-                setCount.setText(set_frag +"セット");
+                setCount.setText("×" + set_frag +"セット");
             }
         });
 
@@ -250,7 +278,7 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
             @Override
             public void onClick(View v) {
                 set_frag+=1;
-                setCount.setText(set_frag +"セット");
+                setCount.setText("×" + set_frag +"セット");
                 if(set_frag==9){
                     setCountButton.setEnabled(false);
                 }
@@ -261,11 +289,7 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
 
         //以下追加
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                // USAGE_MEDIA
-                // USAGE_GAME
                 .setUsage(AudioAttributes.USAGE_GAME)
-                // CONTENT_TYPE_MUSIC
-                // CONTENT_TYPE_SPEECH, etc.
                 .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                 .build();
 
@@ -305,6 +329,15 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
         //sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_UI);
     }
 
+    @Override
+    public void onBackPressed(){
+        // 行いたい処理
+        frag=0;
+        timing =2;
+        handler.removeCallbacks(delayStartCountDown);
+        handler.removeCallbacks(delay);
+        finish();
+    }
 
     // 解除するコードも入れる!
     @Override
@@ -437,7 +470,6 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
         @Override
         public void onFinish() {
             // 完了
-
             timerText.setText(dataFormat.format(10000));
             timerText＿trainig.setText(dataFormat.format(countNumber));
             frag =0;
@@ -445,14 +477,25 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
             x=Math.floor(x);
             double mil =all_count*1000/countNumber;
             double mil_count = stop_count/mil;
-            textView.setText( String.valueOf((int)mil_count) +"秒("+String.valueOf((int)x) +"%)維持できています！");
-            stop_count=0;
-            all_count=0;
+
+
             if(timing ==1){
                 startButton.setEnabled(true);
-            }
-            soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
 
+            }else{
+                textView.setTextColor(Color.RED);
+                textView.setText("トレーニングスコア：" + stop_count*2 + "\n" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
+            }
+            if(mil_count>15){
+                FragmentManager fragmentManager = getFragmentManager();
+                AlertDialogFragment dialogFragment = new AlertDialogFragment();
+                // DialogFragmentの表示
+                dialogFragment.show(fragmentManager, "test alert dialog");
+            }
+            stop_count=0;
+            all_count=0;
+
+             if(timing ==2){}else{   soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);}
 
         }
 
@@ -474,7 +517,9 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
                 timerText＿trainig.setText(dataFormat.format(millisUntilFinished));
                 double x=100*stop_count/all_count;
                 x=Math.floor(x);
-                textView.setText( String.valueOf((int)x) +"%維持できているよ");
+                textView.setTextColor(Color.BLUE);
+                textView.setText( "トレーニングスコア：" +stop_count*2 );
+
                 all_count++;
                 if(move_frag==0){
                 stop_count++;
@@ -486,5 +531,68 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
 
     }
 
+    public static class AlertDialogFragment extends DialogFragment {
+        // 選択肢のリスト
+        private String[] menulist = {"選択(1)","選択(2)","選択(3)"};
 
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        @NonNull
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+            ImageView imageView = new ImageView(getContext());
+            imageView.setImageResource( R.drawable.level_up1);
+            // タイトル
+            alert.setTitle("上の難易度を目指しましょう！");
+            alert.setView(  imageView );
+            alert.setPositiveButton( "OK", null );
+
+            return alert.create();
+        }
+
+        private void setMassage(String message) {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            // mainActivity.setTextView(message);
+        }
+    }
+
+
+
+    public static class AlertDialogFragment_setpoketto extends DialogFragment {
+        final Handler handler = new Handler();
+        private Runnable delayClose;
+
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        @NonNull
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+            ImageView imageView = new ImageView(getContext());
+            imageView.setImageResource( R.drawable.poket);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setAdjustViewBounds(true);
+            // タイトル
+            alert.setTitle("ポケットか背中にスマホを入れましょう！");
+            alert.setView(  imageView );
+           // alert.setPositiveButton( "OK", null );
+            delayClose = new Runnable() {//遅延定義 10/31
+                @Override
+                public void run() {
+                    dismiss();
+
+                }
+            };
+            handler.postDelayed(delayClose, 3000);
+            return alert.create();
+        }
+
+        private void setMassage(String message) {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            // mainActivity.setTextView(message);
+        }
+    }
 }
