@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="\t『Plank Zer0』は部活中や自宅でのプランクトレーニングをサポートするアプリです。「プランク」とは体幹トレーニングの基本メニューの１つで、板(plank)のように腹筋を固めて、体幹（胴体）を真っすぐ伸ばした姿勢を一定時間キープするトレーニングです。プランクは主に腹直筋などを鍛える効果がありますが、正しい姿勢をキープできないとトレーニングの効果をあまり得られません。
+            \n\tこのアプリでは、そんなプランク中の姿勢の崩れを検知し、ユーザーに知らせてくれる機能があります。このアプリを使い続けることで自然と正しいフォームでプランクができるようになります。"
+            android:textColor="#111111"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="___________________________________" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="この画面の使い方です。"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="238dp"
+            android:src="@drawable/help4" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="このアプリでは基本のフロントブリッジだけでなく、動かずに姿勢を一定時間キープするような体幹トレーニングになら何にでも応用できます。『Plank ZER0』で正しいフォームを身につけて効果的なプランクトレーニングを始めましょう！"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</ScrollView>

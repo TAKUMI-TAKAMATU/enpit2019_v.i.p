@@ -170,25 +170,25 @@ class CompareActivity : AppCompatActivity() {
 
 
 
-        //11/11ポッキーの日
-        timer_button.setOnClickListener { /**画像班タイマー*/
-
-            object : CountDownTimer(5000,100){
-                override fun onFinish() {
-                    //終了時の処理
-                    count.text = "終了！！！"
-                    soundPool.play(soundOne, 1.0f, 1.0f, 0, 0, 1.0f)
-
-                }
-
-                override fun onTick(p0: Long) {
-                    // 区切り（0.1秒毎）
-                    count.text = "後 ${p0 /1000} 秒"
-                }
-
-            }.start()
-
-        }
+//        //11/11ポッキーの日
+//        timer_button.setOnClickListener { /**画像班タイマー*/
+//
+//            object : CountDownTimer(5000,100){
+//                override fun onFinish() {
+//                    //終了時の処理
+//                    count.text = "終了！！！"
+//                    soundPool.play(soundOne, 1.0f, 1.0f, 0, 0, 1.0f)
+//
+//                }
+//
+//                override fun onTick(p0: Long) {
+//                    // 区切り（0.1秒毎）
+//                    count.text = "後 ${p0 /1000} 秒"
+//                }
+//
+//            }.start()
+//
+//        }
 
         /**ギャラリーから写真を表示する処理*/
         val PhotoButton = findViewById<Button>(R.id.select_phote)

@@ -72,8 +72,9 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
     private int set_frag = 1;
     private TextView setCount;
 
-    private Runnable delay;
-    private Runnable delayStartCountDown;
+     Runnable delay;
+     Runnable delayStartCountDown;
+    private Runnable enablestart;
     // 3分= 3x60x1000 = 180000 msec
     long countNumber = 20000;
     //スタート前
@@ -90,7 +91,7 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
     private TextView textGraph;
     private LineChart mChart;
     private String[] labels = new String[]{
-            "揺れ",
+            "姿勢の揺れ度",
             "Y軸の揺れ",
             "Z軸の揺れ"};
     private int[] colors = new int[]{
@@ -167,8 +168,8 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
             @Override
             public void onClick(View view) {
                 startButton.setEnabled(false);
-
-
+                handler.removeCallbacks(delayStartCountDown);
+                handler.removeCallbacks(delay);
                 FragmentManager fragmentManager2 = getFragmentManager();
                 AlertDialogFragment_setpoketto dialogFragment_setpoketto = new AlertDialogFragment_setpoketto();
                 // DialogFragmentの表示
@@ -178,27 +179,36 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
                     countDown_before.start();
                     //wait_time();
                     //countDown_beforeで終わるときにスタートボタンが押せるの防ぐ
-                    timing = 1;
+                    //timing = 1;
                     delayStartCountDown = new Runnable() {//遅延定義 10/31
                         @Override
                         public void run() {
+                            timing = 1;
                             if (timing == 1) {
                                 soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
                             }
                         }
                     };
 
+                enablestart = new Runnable() {//遅延定義 10/31
+                    @Override
+                    public void run() {
+                        startButton.setEnabled(false);
+                    }
+                };
                     delay = new Runnable() {//遅延定義 10/31
                         @Override
                         public void run() {
                             mChart.setData(new LineData());
-                            soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
+                                soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
 
                             // 開始
-                            timing = 1;
+
                             first = 1;
                             frag = 1;
+
                             countDown.start();
+                            timing = 0;
                             startButton.setEnabled(false);
                         }
                         // }
@@ -209,6 +219,10 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
                     handler.postDelayed(delay, 10001);//遅延実行
                 int set_frag_c=set_frag;
                 for(int xx=0;set_frag>1;set_frag--) {
+                    handler.postDelayed(enablestart, (set_frag-1)*30000+100);
+                    handler.postDelayed(delayStartCountDown, (set_frag-1)*30000+7000);//遅延実行
+                    handler.postDelayed(delayStartCountDown, (set_frag-1)*30000+8000);//遅延実行
+                    handler.postDelayed(delayStartCountDown, (set_frag-1)*30000+9000);//遅延実行
                     handler.postDelayed(delay, (set_frag-1)*30000+10001);//遅延実行
                 }
                 set_frag=set_frag_c;
@@ -315,6 +329,15 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
         //sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_UI);
     }
 
+    @Override
+    public void onBackPressed(){
+        // 行いたい処理
+        frag=0;
+        timing =2;
+        handler.removeCallbacks(delayStartCountDown);
+        handler.removeCallbacks(delay);
+        finish();
+    }
 
     // 解除するコードも入れる!
     @Override
@@ -374,9 +397,9 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
                 // with t, the low-pass filter's time-constant
                 // and dT, the event delivery rate
 
-                gravity[0] = (FirstX - nextX)*alpha;
-                gravity[1] = (FirstY - nextY)*alpha;
-                gravity[2] = (FirstZ - nextZ)*alpha;
+                gravity[0] = (FirstX - nextX);
+                gravity[1] = (FirstY - nextY);
+                gravity[2] = (FirstZ - nextZ);
 
                 float x = Math.max(gravity[0], gravity[1]);
                 float y = Math.max(x, gravity[2]);
@@ -447,7 +470,6 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
         @Override
         public void onFinish() {
             // 完了
-
             timerText.setText(dataFormat.format(10000));
             timerText＿trainig.setText(dataFormat.format(countNumber));
             frag =0;
@@ -455,9 +477,15 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
             x=Math.floor(x);
             double mil =all_count*1000/countNumber;
             double mil_count = stop_count/mil;
-            textView.setTextColor(Color.RED);
-            textView.setText("トレーニングスコア：" + stop_count*2 + "\n" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
 
+
+            if(timing ==1){
+                startButton.setEnabled(true);
+
+            }else{
+                textView.setTextColor(Color.RED);
+                textView.setText("トレーニングスコア：" + stop_count*2 + "\n" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
+            }
             if(mil_count>15){
                 FragmentManager fragmentManager = getFragmentManager();
                 AlertDialogFragment dialogFragment = new AlertDialogFragment();
@@ -466,10 +494,8 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
             }
             stop_count=0;
             all_count=0;
-            if(timing ==1){
-                startButton.setEnabled(true);
-            }
-            soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
+
+             if(timing ==2){}else{   soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);}
 
         }
 
