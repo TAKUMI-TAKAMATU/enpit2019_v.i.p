@@ -11,6 +11,7 @@ import android.os.HandlerThread
 import android.util.Log
 import android.util.Rational
 import android.util.Size
+import android.view.Gravity
 import android.view.Surface
 import android.view.TextureView
 import android.view.ViewGroup
@@ -65,21 +66,21 @@ class OpencvActivityKt : AppCompatActivity() {
             updateTransform()
         }
 
-        //11/11ポッキーの日
-        timer_button.setOnClickListener { /**画像班タイマー*/
-
-            object : CountDownTimer(5000,100){
-                override fun onFinish() {
-                    //終了時の処理
-                    count.text = "　　　　終了！！！"
-
-                }
-                override fun onTick(p0: Long) {
-                    // 区切り（0.1秒毎）
-                    count.text = "　　　　後 ${p0 /1000} 秒(デモ用)"
-                }
-            }.start()
-        }
+//        //11/11ポッキーの日
+//        timer_button.setOnClickListener { /**画像班タイマー*/
+//
+//            object : CountDownTimer(5000,100){
+//                override fun onFinish() {
+//                    //終了時の処理
+//                    count.text = "　　　　終了！！！"
+//
+//                }
+//                override fun onTick(p0: Long) {
+//                    // 区切り（0.1秒毎）
+//                    count.text = "　　　　後 ${p0 /1000} 秒(デモ用)"
+//                }
+//            }.start()
+//        }
     }
     /**カメラを起動*/
     private fun startCamera() {
@@ -157,7 +158,7 @@ class OpencvActivityKt : AppCompatActivity() {
                 if (currentTimestamp - lastAnalyzedTimestamp >=
                         TimeUnit.SECONDS.toMillis(1)) {
                     /**ここから画像処理が始まる．毎秒ごとに平均輝度を計算する------------------------------*/
-                    val Threshold=10  //しきい値
+                    val Threshold=5  //しきい値
                     // ImageAnalysisはYUV形式なのでimage.planes[0]にはY (輝度) planeが格納されている
                     val buffer = image.planes[0].buffer
                     // callback objectからimage dataの抽出
@@ -168,8 +169,10 @@ class OpencvActivityKt : AppCompatActivity() {
                     luma = pixels.average()
                     if(abs(luma-luma2)>Threshold &&capture_done==1) {
 
-                        val msg = "画像内の異常を検知しました.\nt秒維持することができました\n"
-                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                        val msg = "姿勢が崩れました.\n計測を終了しました\nカメラボタンを押すと再開できます"
+                        val message= Toast.makeText(baseContext, msg, Toast.LENGTH_LONG)
+                        message.setGravity(Gravity.CENTER, 0, 0)
+                        message.show()
                         Log.d("CameraXApp" , "Average luminosity: $luma")
                         capture_done=0
 

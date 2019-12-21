@@ -46,6 +46,9 @@ import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+
 public class BiginnerActivity extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager sensorManager;
@@ -71,6 +74,9 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
     final Handler handler = new Handler();
     private int set_frag = 1;
     private TextView setCount;
+
+    private int totalscore=0;
+    private double totalmil=0;
 
      Runnable delay;
      Runnable delayStartCountDown;
@@ -101,11 +107,24 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
     private boolean lineardata = true;
 
 
+    private int No1;
+    private int No2;
+    private int No3;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_biginner);
+
+        SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+        Editor editor = sp.edit();
+        No1 = sp.getInt("int_No1", 0);
+        No2 = sp.getInt("int_No2", 0);
+        No3 = sp.getInt("int_No3", 0);
+
+
+
 
 
         startButton = findViewById(R.id.start_button);//タイマーのボタン
@@ -122,7 +141,7 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
 
         // CountDownTimer(long millisInFuture, long countDownInterval)
 
-        final BiginnerActivity.CountDown countDown_before = new BiginnerActivity.CountDown(countbefore, interval);
+        final CountDown countDown_before = new CountDown(10000, interval);
 
 
         // 縦画面
@@ -164,12 +183,16 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
 
 
         //スタートボタンの処理
-        startButton.setOnClickListener(new View.OnClickListener() {
+        startButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 startButton.setEnabled(false);
                 handler.removeCallbacks(delayStartCountDown);
                 handler.removeCallbacks(delay);
+
+                totalscore=0;
+                totalmil=0;
+
                 FragmentManager fragmentManager2 = getFragmentManager();
                 AlertDialogFragment_setpoketto dialogFragment_setpoketto = new AlertDialogFragment_setpoketto();
                 // DialogFragmentの表示
@@ -201,12 +224,9 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
                         public void run() {
                             mChart.setData(new LineData());
                                 soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
-
-                            // 開始
-
                             first = 1;
                             frag = 1;
-
+                            timing = 1;
                             countDown.start();
                             timing = 0;
                             startButton.setEnabled(false);
@@ -230,23 +250,25 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
             }
         });
         //ストップボタンの処理
-        stopButton.setOnClickListener(new View.OnClickListener(){
+        stopButton.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
                 // 中止
                 startButton.setEnabled(true);
-                if(frag==1){
-                    countDown.cancel();}
-                if(frag ==0){
-                    countDown_before.cancel();}
+                //if(frag==1){
+                    countDown.cancel();
+            //}
+                //if(frag ==0){
+                    countDown_before.cancel();
+            //}
                 handler.removeCallbacks(delay);
                 frag=0;
-                timing =0;
+              //  timing =0;
                 handler.removeCallbacks(delayStartCountDown);
                 handler.removeCallbacks(delay);
                 timerText.setText(dataFormat.format(10000));
                 timerText＿trainig.setText(dataFormat.format(countNumber));
-
+                timing =0;
                 stop_count=0;
                 all_count=0;
                 setCountButton.setEnabled(true);
@@ -257,7 +279,7 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
 
 
         Button returnButton_sensor = findViewById(R.id.return_button_sensor);
-        returnButton_sensor.setOnClickListener(new View.OnClickListener() {
+        returnButton_sensor.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(frag==1){
@@ -274,7 +296,7 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
         });
 
 
-        setCountButton.setOnClickListener(new View.OnClickListener(){
+        setCountButton.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
                 set_frag+=1;
@@ -332,6 +354,8 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
     @Override
     public void onBackPressed(){
         // 行いたい処理
+        if(frag==1){
+            countDown.cancel();}
         frag=0;
         timing =2;
         handler.removeCallbacks(delayStartCountDown);
@@ -397,9 +421,9 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
                 // with t, the low-pass filter's time-constant
                 // and dT, the event delivery rate
 
-                gravity[0] = (FirstX - nextX)*alpha;
-                gravity[1] = (FirstY - nextY)*alpha;
-                gravity[2] = (FirstZ - nextZ)*alpha;
+                gravity[0] = (FirstX - nextX);
+                gravity[1] = (FirstY - nextY);
+                gravity[2] = (FirstZ - nextZ);
 
                 float x = Math.max(gravity[0], gravity[1]);
                 float y = Math.max(x, gravity[2]);
@@ -484,9 +508,48 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
 
             }else{
                 textView.setTextColor(Color.RED);
-                textView.setText("トレーニングスコア：" + stop_count*2 + "\n" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
+                //textView.setText("ランキング！\n NO.1:"+No1+"\n NO.2:"+No2+"\n NO.3:"+No3+"\n トレーニングスコア：" + stop_count*2 + "\n" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
+                if(set_frag >1){
+                    totalmil+=mil_count;
+                    totalscore+=stop_count*2;
+                    textView.setText("合計スコア：" + totalscore + "\n合計" + String.valueOf((int)totalmil)+ "秒キープできたよ！");
+                }else{
+                    if(No1< stop_count*2){
+                        SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+                        Editor editor = sp.edit();
+                        No3 = No2;
+                        No2 = No1;
+                        No1 = stop_count*2;
+
+                        editor.putInt("int_No1", No1); // int_1というキーに i の中身(2)を設定
+                        editor.putInt("int_No2", No2); // int_1というキーに i の中身(2)を設定
+                        editor.putInt("int_No3", No3); // int_1というキーに i の中身(2)を設定
+                        editor.commit(); // ここで実際にファイルに保存
+                    }else if(No2 < stop_count*2){
+                        SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+                        Editor editor = sp.edit();
+                        No3 = No2;
+                        No2 = stop_count*2;
+
+                        // editor.putInt("int_No1", No1); // int_1というキーに i の中身(2)を設定
+                        editor.putInt("int_No2", No2); // int_1というキーに i の中身(2)を設定
+                        editor.putInt("int_No3", No3); // int_1というキーに i の中身(2)を設定
+                        editor.commit();
+                    }else if(No3 < stop_count*2){
+                        SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+                        Editor editor = sp.edit();
+                        No3 = stop_count*2;
+
+                        // editor.putInt("int_No1", No1); // int_1というキーに i の中身(2)を設定
+                        //editor.putInt("int_No2", No2); // int_1というキーに i の中身(2)を設定
+                        editor.putInt("int_No3", No3); // int_1というキーに i の中身(2)を設定
+                        editor.commit();
+                    }
+
+                    textView.setText("ランキング！\n 1位:"+No1+"\n 2位:"+No2+"\n 3位:"+No3+"\n\nトレーニングスコア：" + stop_count*2 + "\n今回は" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
+                }
             }
-            if(mil_count>15){
+            if(mil_count>18){
                 FragmentManager fragmentManager = getFragmentManager();
                 AlertDialogFragment dialogFragment = new AlertDialogFragment();
                 // DialogFragmentの表示
@@ -509,6 +572,9 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
             //long ms = millisUntilFinished - ss * 1000 - mm * 1000 * 60;
             //timerText.setText(String.format("%1$02d:%2$02d.%3$03d", mm, ss, ms));
 
+            if(millisUntilFinished>10000){
+                frag=1;
+            }
             if(frag==0){
                 timerText.setText(dataFormat.format(millisUntilFinished));
             }
@@ -526,6 +592,7 @@ public class BiginnerActivity extends AppCompatActivity implements SensorEventLi
                 }
 
             }
+
 
         }
 

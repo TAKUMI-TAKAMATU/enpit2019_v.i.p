@@ -46,6 +46,11 @@ import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+
+
 public class AdvancedActivity extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager sensorManager;
@@ -71,6 +76,9 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
     final Handler handler = new Handler();
     private int set_frag = 1;
     private TextView setCount;
+
+    private int totalscore=0;
+    private double totalmil=0;
 
     private Runnable delay;
     private Runnable delayStartCountDown;
@@ -101,12 +109,22 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
             Color.MAGENTA};
     private boolean lineardata = true;
 
+    private int No1;
+    private int No2;
+    private int No3;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced);
+
+
+        SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+        Editor editor = sp.edit();
+        No1 = sp.getInt("int_No1", 0);
+        No2 = sp.getInt("int_No2", 0);
+        No3 = sp.getInt("int_No3", 0);
 
 
         startButton = findViewById(R.id.start_button);//タイマーのボタン
@@ -172,6 +190,10 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
             public void onClick(View view) {
                 handler.removeCallbacks(delayStartCountDown);
                 handler.removeCallbacks(delay);
+
+                totalscore=0;
+                totalmil=0;
+
                 FragmentManager fragmentManager2 = getFragmentManager();
                 BiginnerActivity.AlertDialogFragment_setpoketto dialogFragment_setpoketto = new BiginnerActivity.AlertDialogFragment_setpoketto();
                 // DialogFragmentの表示
@@ -203,11 +225,9 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
                     public void run() {
                         mChart.setData(new LineData());
                         soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);
-
-                        // 開始
-                       // timing =0;
                         first =1;
                         frag=1;
+                        timing = 1;
                         countDown.start();
                         timing = 0;
                         startButton.setEnabled(false);
@@ -403,9 +423,9 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
                 // with t, the low-pass filter's time-constant
                 // and dT, the event delivery rate
 
-                gravity[0] = (FirstX - nextX)*alpha;
-                gravity[1] = (FirstY - nextY)*alpha;
-                gravity[2] = (FirstZ - nextZ)*alpha;
+                gravity[0] = (FirstX - nextX);
+                gravity[1] = (FirstY - nextY);
+                gravity[2] = (FirstZ - nextZ);
 
                 float x = Math.max(gravity[0], gravity[1]);
                 float y = Math.max(x, gravity[2]);
@@ -485,11 +505,48 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
             double mil =all_count*1000/countNumber;
             double mil_count = stop_count/mil;
 
+
+
+
             if(timing ==1) {
                 startButton.setEnabled(true);
             }else{
                 textView.setTextColor(Color.RED);
-                textView.setText("トレーニングスコア：" + stop_count*2 + "\n" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
+                if(set_frag >1){
+                    totalmil+=mil_count;
+                    totalscore+=stop_count*2;
+                    textView.setText("合計スコア：" + totalscore + "\n合計" + String.valueOf((int)totalmil)+ "秒キープできたよ！");
+                }else{
+                    if(No1< stop_count*2){
+                        SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+                        Editor editor = sp.edit();
+                        No3 = No2;
+                        No2 = No1;
+                        No1 = stop_count*2;
+
+                        editor.putInt("int_No1", No1); // int_1というキーに i の中身(2)を設定
+                        editor.putInt("int_No2", No2); // int_1というキーに i の中身(2)を設定
+                        editor.putInt("int_No3", No3); // int_1というキーに i の中身(2)を設定
+                        editor.commit(); // ここで実際にファイルに保存
+                    }else if(No2 < stop_count*2){
+                        SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+                        Editor editor = sp.edit();
+                        No3 = No2;
+                        No2 = stop_count*2;
+
+                        editor.putInt("int_No2", No2); // int_1というキーに i の中身(2)を設定
+                        editor.putInt("int_No3", No3); // int_1というキーに i の中身(2)を設定
+                        editor.commit();
+                    }else if(No3 < stop_count*2){
+                        SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+                        Editor editor = sp.edit();
+                        No3 = stop_count*2;
+                        editor.putInt("int_No3", No3); // int_1というキーに i の中身(2)を設定
+                        editor.commit();
+                    }
+
+                    textView.setText("ランキング！\n 1位:"+No1+"\n 2位:"+No2+"\n 3位:"+No3+"\n\nトレーニングスコア：" + stop_count*2 + "\n今回は" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
+                }
             }
 
 
@@ -507,7 +564,10 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
             //long ss = millisUntilFinished / 1000 % 60;
             //long ms = millisUntilFinished - ss * 1000 - mm * 1000 * 60;
             //timerText.setText(String.format("%1$02d:%2$02d.%3$03d", mm, ss, ms));
-
+            if(millisUntilFinished>10000){
+                frag=1;
+            }
+            
             if (frag == 0) {
                 timerText.setText(dataFormat.format(millisUntilFinished));
             }
@@ -525,20 +585,33 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
         }
     }
 
-    public static class AlertDialogFragment_setpoketto extends DialogFragment {
+    public static class AlertDialogFragment_checkScore extends DialogFragment {
+
+        private int No1;
+        private int No2;
+        private int No3;
+
 
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+
+          //  SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+          //  Editor editor = sp.edit();
+           // No1 = sp.getInt("int_No1", 0);
+          //  No2 = sp.getInt("int_No2", 0);
+          //  No3 = sp.getInt("int_No3", 0);
+
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
             ImageView imageView = new ImageView(getContext());
             imageView.setImageResource( R.drawable.poket);
             // タイトル
-            alert.setTitle("ポケットか背中にスマホを入れましょう！");
-            alert.setView(  imageView );
+            alert.setTitle("スコアランキング！");
+            //alert.setView(  imageView );
+            alert.setMessage(""+ No1 );
             alert.setPositiveButton( "OK", null );
 
 

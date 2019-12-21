@@ -104,7 +104,7 @@
 
             <TextView
                 android:id="@+id/settime"
-                android:layout_width="137dp"
+                android:layout_width="150dp"
                 android:layout_height="51dp"
                 android:layout_margin="10dp"
                 android:baselineAligned="false"
@@ -115,7 +115,7 @@
             <Button
                 android:id="@+id/set_button"
                 android:layout_width="wrap_content"
-                android:layout_height="51dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_marginLeft="1dp"
                 android:background="@drawable/button_state"
@@ -133,7 +133,7 @@
 
             <Button
                 android:id="@+id/start_button"
-                android:layout_width="144dp"
+                android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_state"
@@ -144,7 +144,7 @@
 
             <Button
                 android:id="@+id/stop_button"
-                android:layout_width="152dp"
+                android:layout_width="148dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/button_state"

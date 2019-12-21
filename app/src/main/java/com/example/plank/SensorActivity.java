@@ -39,6 +39,17 @@ public class SensorActivity extends AppCompatActivity {
 
 
         if (isFirstTime()) {
+            SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+
+            int No1 = 0;
+            int No2 = 0;
+            int No3 = 0;
+            editor.putInt("int_No1", No1); // int_1というキーに i の中身(2)を設定
+            editor.putInt("int_No2", No2); // int_1というキーに i の中身(2)を設定
+            editor.putInt("int_No3", No3); // int_1というキーに i の中身(2)を設定
+            editor.commit(); // ここで実際にファイルに保存
+
             // show dialog
             FragmentManager fragmentManager = getFragmentManager();
 
@@ -46,11 +57,12 @@ public class SensorActivity extends AppCompatActivity {
             AlertDialogFragment dialogFragment = new AlertDialogFragment();
             // DialogFragmentの表示
             dialogFragment.show(fragmentManager, "test alert dialog");
+
         }
 
         //初心者モード画面に遷移
         Button BiginnerModeButton = findViewById(R.id.biginnermode_button);
-        BiginnerModeButton.setOnClickListener(new View.OnClickListener() {
+        BiginnerModeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), BiginnerActivity.class);
@@ -61,7 +73,7 @@ public class SensorActivity extends AppCompatActivity {
 
         //中級者モード画面に遷移
         Button IntermediateModeButton = findViewById(R.id.intermediatemode_button);
-        IntermediateModeButton.setOnClickListener(new View.OnClickListener() {
+        IntermediateModeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), IntermediateActivity.class);
@@ -72,7 +84,7 @@ public class SensorActivity extends AppCompatActivity {
 
         //上級者モード画面に遷移
         Button AdvancedModeButton = findViewById(R.id.advancedmode_button);
-        AdvancedModeButton.setOnClickListener(new View.OnClickListener() {
+        AdvancedModeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), AdvancedActivity.class);
@@ -82,7 +94,7 @@ public class SensorActivity extends AppCompatActivity {
 
         //ホーム画面に戻る処理
         Button returnButton = findViewById(R.id.return_sub);
-        returnButton.setOnClickListener(new View.OnClickListener() {
+        returnButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -94,7 +106,7 @@ public class SensorActivity extends AppCompatActivity {
         Button helpButton = findViewById(R.id.helpButton);
 
         // ボタンタップでAlertを表示させる
-        helpButton.setOnClickListener(new View.OnClickListener() {
+        helpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
@@ -138,7 +150,7 @@ public class SensorActivity extends AppCompatActivity {
             ImageView imageView = new ImageView(getContext());
             imageView.setImageResource( R.drawable.help1);
             // タイトル
-            alert.setTitle("使い方！");
+            alert.setTitle("1人用の使い方！");
             alert.setView(  imageView );
             alert.setView(R.layout.activity_help1);
             alert.setPositiveButton( "OK", null );

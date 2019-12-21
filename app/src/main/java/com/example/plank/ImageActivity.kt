@@ -50,7 +50,7 @@ class ImageActivity : AppCompatActivity() {
         val helpButton = findViewById<Button>(R.id.helpButton2)
         helpButton.setOnClickListener {
             AlertDialog.Builder(this)
-                    .setTitle("ダイアログのタイトルです")
+                    .setTitle("2人用の使い方！")
                     .setView(R.layout.activity_help2)
                     .setPositiveButton( "OK", null )
                     .show()

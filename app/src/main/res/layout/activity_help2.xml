@@ -12,9 +12,112 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:text="　部活中などに2人で使用することを前提としたモードです。実際にプランクをするユーザーとそれを撮影する撮影者の2名が必要になります。このモードでプランクの正しい姿勢を身につけてから、1人用モードでその姿勢を維持できるようになりましょう！"
+            android:textColor="#111111"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="____________________________________" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="この画面の説明です。"
             android:textColor="#111111"
             android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/help8" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="「フォームを比較する」モードの説明です。"
+            android:textColor="#111111"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:src="@drawable/help9" />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="\n①サンプル画像：\n     比較用に用意したプランクのイラスト画像です。\n②画像比較ボタン：\n     このボタンを押すと上画面に表示された画像が半透明に鳴ります。透明化した画像を下画面にドラッグし、プランクをしているユーザーと重ね合わせてフォームを比較しましょう。
+            \n③透明化解除ボタン：\n     比較ボタンで透明化した画像を元に戻します。ドラッグした画像は元の位置まで戻りません。\n④写真選択ボタン：\n     画像フォルダにアクセスし、過去の自分のプランク画像やユーザー自身が用意した理想的なプランク画像を選択できます。選択した画像は上画面に表示されます。
+            \n⑤カメラボタン：\n     下画面に写っているユーザーをカメラで撮影します。押すと撮影した写真が保存され、もう一度押すとその写真が上画面に表示されます。\n"
+            android:textColor="#111111"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/help10" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textColor="#111111"
+            android:textSize="16sp" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/help11" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="「姿勢の崩れを検知する」モードの説明です。"
+            android:textColor="#111111"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/help5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/help6" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/help7" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="※このモードでは画面内の輝度の変化で動きを判定しています。そのため、姿勢の変化だけでなく画面内で何かが動くだけで姿勢が崩れたと判定されることがあります。ご使用の際は、スマートフォンをできるだけ動かさずにお使いください。"
+            android:textColor="#111111"
+            android:textSize="15sp" />
 
 
     </LinearLayout>
