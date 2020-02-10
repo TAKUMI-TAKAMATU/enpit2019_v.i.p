@@ -168,7 +168,7 @@ public class ScoreCheckActivity extends AppCompatActivity{
             // ave.setText(Integer.toString(averagePoint[i]));
         ave.setText("ave");
         if ((dataNum + 1) % 2 == 0) {
-            int color = getResources().getColor(R.color.colorPrimary);
+            int color = getResources().getColor(R.color.chart_dg_gray);
             name.setBackgroundColor(color);
             point.setBackgroundColor(color);
             score.setBackgroundColor(color);

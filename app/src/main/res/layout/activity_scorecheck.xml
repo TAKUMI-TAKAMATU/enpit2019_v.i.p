@@ -51,7 +51,7 @@
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/color_blue"
                     android:gravity="center"
                     android:paddingLeft="10dp"
                     android:paddingTop="2dp"
@@ -59,7 +59,7 @@
                     android:paddingBottom="2dp"
                     android:text="日時"
                     android:textColor="@color/colorAccent"
-                    android:textSize="16sp" />
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -67,7 +67,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="@color/color_blue"
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingTop="2dp"
@@ -75,14 +75,14 @@
                 android:paddingBottom="2dp"
                 android:text="スコア"
                 android:textColor="@color/colorAccent"
-                android:textSize="16sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/color_blue"
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingTop="2dp"
@@ -90,14 +90,14 @@
                 android:paddingBottom="2dp"
                 android:text="モード"
                 android:textColor="@color/colorAccent"
-                android:textSize="16sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/color_blue"
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:paddingTop="2dp"
@@ -105,7 +105,7 @@
                 android:paddingBottom="2dp"
                 android:text="キープ"
                 android:textColor="@color/colorAccent"
-                android:textSize="16sp" />
+                android:textSize="24sp" />
 
         </TableRow>
     </TableLayout>

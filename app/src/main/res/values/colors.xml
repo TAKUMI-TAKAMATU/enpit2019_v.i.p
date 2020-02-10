@@ -3,4 +3,6 @@
     <color name="colorPrimary">#D7F7B1</color>
     <color name="colorPrimaryDark">#FF9800</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="chart_dg_gray">#D9E1E9</color>
+    <color name="color_blue">#84C6FA</color>
 </resources>
