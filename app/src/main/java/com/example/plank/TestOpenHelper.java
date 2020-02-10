@@ -8,7 +8,7 @@ import android.util.Log;
 public class TestOpenHelper extends SQLiteOpenHelper {
 
     // データーベースのバージョン
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // データーベース名
     private static final String DATABASE_NAME = "TestDB.db";
@@ -55,6 +55,7 @@ public class TestOpenHelper extends SQLiteOpenHelper {
         db.execSQL(
                 SQL_DELETE_ENTRIES
         );
+
         onCreate(db);
     }
 
