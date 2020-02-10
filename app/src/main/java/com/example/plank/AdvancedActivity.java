@@ -1,10 +1,12 @@
 package com.example.plank;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.CountDownTimer;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -22,6 +24,7 @@ import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.util.Log;
 import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Locale;
 import android.view.animation.RotateAnimation;
 import android.os.Handler;
@@ -53,6 +56,10 @@ import android.content.SharedPreferences.Editor;
 
 public class AdvancedActivity extends AppCompatActivity implements SensorEventListener {
 
+
+    private TestOpenHelper helper;
+    private SQLiteDatabase db;
+    private DateFormat df = new SimpleDateFormat("yyyy/MM/dd ");
     private SensorManager sensorManager;
     private TextView timerText;//タイマーの表示文
     private TextView timerText＿trainig;
@@ -515,7 +522,7 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
                 if(set_frag >1){
                     totalmil+=mil_count;
                     totalscore+=stop_count*2;
-                    textView.setText("合計スコア：" + totalscore + "\n合計" + String.valueOf((int)totalmil)+ "秒キープできたよ！");
+                    textView.setText("合計スコア：" + totalscore + "\n" + String.valueOf((int)totalmil)+ "秒キープできたよ！");
                 }else{
                     if(No1< stop_count*2){
                         SharedPreferences sp = getSharedPreferences("DataStore", MODE_PRIVATE);
@@ -546,6 +553,23 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
                     }
 
                     textView.setText("ランキング！\n 1位:"+No1+"\n 2位:"+No2+"\n 3位:"+No3+"\n\nトレーニングスコア：" + stop_count*2 + "\n今回は" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
+
+                    if(helper == null){
+                        helper = new TestOpenHelper(getApplicationContext());
+                    }
+
+                    if(db == null){
+                        db = helper.getWritableDatabase();
+                    }
+
+                    //String key = editTextKey.getText().toString();
+                    //String value = editTextValue.getText().toString();
+
+                    //insertData(db, key, Integer.valueOf(value));
+                    //現在の時刻
+                    String date = getNowDate();
+                    //return df.format(date);
+                    insertData(db, date,stop_count*2,mil_count);
                 }
             }
 
@@ -554,6 +578,25 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
             all_count=0;
             if(timing ==2){}else{   soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);}
         }
+
+
+        public  String getNowDate(){
+            final Date date = new Date(System.currentTimeMillis());
+            return df.format(date);
+        }
+
+        //追加 dbにかきこみ
+        private void insertData(SQLiteDatabase db, String date, int score,double sec){
+
+            ContentValues values = new ContentValues();
+            values.put("date", date);
+            values.put("score", score);
+            values.put("level", "上級者");
+            values.put("sec", sec);
+
+            db.insert("testdb", null, values);
+        }
+
 
 
         // インターバルで呼ばれる
@@ -567,7 +610,7 @@ public class AdvancedActivity extends AppCompatActivity implements SensorEventLi
             if(millisUntilFinished>10000){
                 frag=1;
             }
-            
+
             if (frag == 0) {
                 timerText.setText(dataFormat.format(millisUntilFinished));
             }

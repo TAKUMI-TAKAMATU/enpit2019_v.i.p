@@ -1,21 +1,22 @@
 package com.example.plank;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.util.Log;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -75,6 +76,15 @@ public class MainActivity extends AppCompatActivity {
                 dialogFragment.show(fragmentManager, "test alert dialog");
             }
         });
+
+        Button QuestionnaireButton = findViewById(R.id.QuestionnaireButton);
+        QuestionnaireButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick (View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/Zaq9huVe8jLWLCKG7"));
+                startActivity(intent);
+            }
+        });
+
 
     }
     public void setTextView(String message){

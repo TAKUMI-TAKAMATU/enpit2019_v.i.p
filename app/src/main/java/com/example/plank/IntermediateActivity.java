@@ -1,10 +1,12 @@
 package com.example.plank;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.CountDownTimer;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -17,6 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.text.DateFormat;
 import java.util.List;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
@@ -53,6 +57,10 @@ import android.content.SharedPreferences.Editor;
 
 public class IntermediateActivity extends AppCompatActivity implements SensorEventListener {
 
+
+    private TestOpenHelper helper;
+    private SQLiteDatabase db;
+    private DateFormat df = new SimpleDateFormat("yyyy/MM/dd ");
     private SensorManager sensorManager;
     private TextView timerText;//タイマーの表示ぶん
     private TextView timerText＿trainig;
@@ -480,7 +488,7 @@ public class IntermediateActivity extends AppCompatActivity implements SensorEve
 
                     totalmil+=mil_count;
                     totalscore+=stop_count*2;
-                    textView.setText("合計スコア：" + totalscore + "\n合計" + String.valueOf((int)totalmil)+ "秒キープできたよ！");
+                    textView.setText("合計スコア：" + totalscore + "\n" + String.valueOf((int)totalmil)+ "秒キープできたよ！");
                 }else{
 
 
@@ -514,6 +522,22 @@ public class IntermediateActivity extends AppCompatActivity implements SensorEve
 
                     textView.setText("ランキング！\n 1位:"+No1+"\n 2位:"+No2+"\n 3位:"+No3+"\n\nトレーニングスコア：" + stop_count*2 + "\n今回は" + String.valueOf((int)mil_count)+ "秒キープできたよ！");
                 }
+                if(helper == null){
+                    helper = new TestOpenHelper(getApplicationContext());
+                }
+
+                if(db == null){
+                    db = helper.getWritableDatabase();
+                }
+
+                //String key = editTextKey.getText().toString();
+                //String value = editTextValue.getText().toString();
+
+                //insertData(db, key, Integer.valueOf(value));
+                //現在の時刻
+                String date = getNowDate();
+                //return df.format(date);
+                insertData(db, date,stop_count*2,mil_count);
             }
             stop_count=0;
             all_count=0;
@@ -530,6 +554,21 @@ public class IntermediateActivity extends AppCompatActivity implements SensorEve
             if(timing ==2){}else{   soundPool.play(soundFour, 1.0f, 1.0f, 0, 0, 1);}
         }
 
+        public  String getNowDate(){
+            final Date date = new Date(System.currentTimeMillis());
+            return df.format(date);
+        }
+
+        //追加 dbにかきこみ
+        private void insertData(SQLiteDatabase db, String date, int score,double sec){
+
+            ContentValues values = new ContentValues();
+            values.put("date", date);
+            values.put("score", score);
+            values.put("level", "中級者");
+            values.put("sec", sec);
+            db.insert("testdb", null, values);
+        }
 
         // インターバルで呼ばれる
         @Override

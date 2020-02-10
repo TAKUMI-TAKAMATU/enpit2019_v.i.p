@@ -48,6 +48,9 @@
         <activity
             android:name=".AdvancedActivity"
             android:label="Plank"></activity>
+        <activity
+            android:name=".ScoreCheckActivity"
+            android:label="Plank"></activity>
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/activity_image2" />

@@ -37,15 +37,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="「フォームを比較する」モードの説明です。"
+            android:text="「フォームを比較する」モードの説明"
             android:textColor="#111111"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:src="@drawable/help9" />
-
 
 
         <TextView
@@ -83,7 +82,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="「姿勢の崩れを検知する」モードの説明です。"
+            android:text="「姿勢の崩れを検知する」モードの説明"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="\n1.カメラを向けた状態で維持したい姿勢をとってください。"
             android:textColor="#111111"
             android:textSize="16sp" />
 
@@ -97,6 +103,13 @@
             android:layout_height="match_parent"
             android:text="" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="2.ボタンを押すと計測が始まります。"
+            android:textColor="#111111"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -106,6 +119,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="3.姿勢が大きく崩れるとメーセージが表示されます。\nもう一度ボタンを押すと計測が再開されます。"
+            android:textColor="#111111"
+            android:textSize="16sp" />
 
         <ImageView
             android:layout_width="match_parent"

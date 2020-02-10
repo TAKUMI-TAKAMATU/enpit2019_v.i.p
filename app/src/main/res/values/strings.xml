@@ -29,6 +29,7 @@
     <string name="biginnermode_button">biginner</string>
     <string name="intermediatemode_button">intermediate</string>
     <string name="advancedmode_button">advanced</string>
+    <string name="ScoreCheck_Button">ScoreCheckButton</string>
     <string name="helpButton">helpButton</string>
     <string name="helpImg">helpImg</string>
 </resources>

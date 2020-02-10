@@ -92,6 +92,18 @@ public class SensorActivity extends AppCompatActivity {
             }
         });
 
+        //日々の記録画面に遷移
+        Button ScoreCheckModeButton = findViewById(R.id.ScoreCheckButton);
+        ScoreCheckModeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(), ScoreCheckActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
         //ホーム画面に戻る処理
         Button returnButton = findViewById(R.id.return_sub);
         returnButton.setOnClickListener(new OnClickListener() {
