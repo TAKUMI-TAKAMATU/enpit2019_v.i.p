@@ -73,6 +73,9 @@ public class ScoreCheckActivity extends AppCompatActivity{
 
         if(db == null){
             db = helper.getReadableDatabase();
+        }else{
+            //db = helper.getReadableDatabase();
+           // helper.onUpgrade(db ,1,2);
         }
        // Log.d("debug","**********Cursor");
 
